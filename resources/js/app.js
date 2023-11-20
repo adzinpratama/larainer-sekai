@@ -7,6 +7,9 @@ import nProgress from "nprogress";
 // import "bootstrap";
 // import "./styles/main.scss";
 // import directives from "./directives";
+import "vue3-toastify/dist/index.css";
+import "filepond/dist/filepond.min.css";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "./assets/styles.scss";
 
 import PrimeVue from "primevue/config";
@@ -125,14 +128,22 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(PrimeVue, { ripple: true })
+            .use(DialogService)
+            .use(ConfirmationService)
+            .use(ToastService)
             .component("InertiaHead", Head)
             .component("InertiaLink", Link)
+            .component("router-link", {
+                props: ["to", "custom"],
+                template: `<inertia-link :href="to"><slot/></inertia-link>`,
+            })
             .component("Icon", Icon);
 
-        app.use(PrimeVue, { ripple: true });
-        app.use(ToastService);
-        app.use(DialogService);
-        app.use(ConfirmationService);
+        // app.use(PrimeVue, { ripple: true });
+        // app.use(ToastService);
+        // app.use(DialogService);
+        // app.use(ConfirmationService);
 
         app.directive("tooltip", Tooltip);
         app.directive("badge", BadgeDirective);
@@ -230,7 +241,7 @@ createInertiaApp({
         app.component("VirtualScroller", VirtualScroller);
 
         // directives(app);
-        app.mount(el);
+        return app.mount(el);
     },
 });
 

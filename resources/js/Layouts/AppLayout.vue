@@ -1,10 +1,10 @@
 <script setup>
-import { computed, watch, ref } from "vue";
+import { computed, watch, ref, onMounted } from "vue";
 import AppTopbar from "./AppTopbar.vue";
 import AppFooter from "./AppFooter.vue";
 import AppSidebar from "./AppSidebar.vue";
 import AppConfig from "./AppConfig.vue";
-import { useLayout } from "@/layout/composables/layout";
+import { useLayout } from "@/Layouts/composables/layout";
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
@@ -62,6 +62,10 @@ const isOutsideClicked = (event) => {
         topbarEl.contains(event.target)
     );
 };
+
+onMounted(() => setTimeout(() => {
+    document.getElementById('preloader')?.remove()
+}, 800))
 </script>
 
 <template>

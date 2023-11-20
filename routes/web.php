@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DasboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,5 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [DasboardController::class, 'index'])
-    ->name('dashboard');
+Route::middleware(['guest'])
+    ->group(function () {
+        Route::get('auth/login', [AuthController::class, 'login'])
+            ->name('login');
+        Route::post('auth/process', [AuthController::class, 'auth'])
+            ->name('auth.process');
+    });
+
+Route::middleware(['auth:web'])
+    ->group(function () {
+
+        Route::get('/', [DasboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::post('auth/logout', [AuthController::class, 'logout'])
+            ->name('auth.logout');
+    });
